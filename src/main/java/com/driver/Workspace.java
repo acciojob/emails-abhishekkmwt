@@ -28,23 +28,42 @@ public class Workspace extends Gmail{
         // 2. If you want to attend a meeting, you must join it at its start time and leave at end time.
         // Example: If a meeting ends at 10:00 am, you cannot attend another meeting starting at 10:00 am
         int count = 1;
+        int i=0;
+        int j=1;
         Comparator<Meeting> comparatorDes = (a,b)->a.getStartTime().compareTo(b.getStartTime());
         Collections.sort(calendar,comparatorDes);
-        for(int i=0;i<calendar.size()-1;i++){
-            int compareValue = calendar.get(i).getEndTime().compareTo(calendar.get(i+1).getStartTime());
-            if(compareValue < 0){
-                  count++;
+        while(i<calendar.size() && j<calendar.size() && i<=j){
+            if(j<calendar.size() && calendar.get(i).getEndTime().compareTo(calendar.get(j).getStartTime()) < 0){
+                count++;
+                i++;
+                j++;
             }
-            else if(compareValue > 0){
-                if(calendar.get(i+2)!=null && calendar.get(i).getEndTime().compareTo(calendar.get(i+2).getStartTime()) <0){
-                    count++;
-                    i++;
+            else if(j<calendar.size() && calendar.get(i).getEndTime().compareTo(calendar.get(j).getStartTime()) > 0){
+                j++;
+                if(j<calendar.size() && calendar.get(i).getEndTime().compareTo(calendar.get(j).getStartTime()) < 0){
+                     count++;
+                     i=j;
                 }
                 else{
-                    return count;
+                    j++;
                 }
             }
         }
+//        for(int i=0;i<calendar.size()-1;i++){
+//            int compareValue = calendar.get(i).getEndTime().compareTo(calendar.get(i+1).getStartTime());
+//            if(compareValue < 0){
+//                  count++;
+//            }
+//            else if(compareValue > 0){
+//                if(calendar.get(i+2)!=null && calendar.get(i).getEndTime().compareTo(calendar.get(i+2).getStartTime()) <0){
+//                    count++;
+//                    i++;
+//                }
+//                else{
+//                    return count;
+//                }
+//            }
+//        }
         return count;
     }
 }
